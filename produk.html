@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <style>
+      body {
+        background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(81, 46, 25) 100%);
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+      }
+      h1{
+        text-align: center;
+        padding: 10px;
+        justify-content: center;
+        background-color:rgb(230, 203, 177);display: flex;
+      }
+      h2{
+        text-align: center;
+        padding: 10px;
+        justify-content: center;
+        color:rgb(230, 203, 177);
+      }
+      .produkitem{
+        height: 200px;
+        text-align: center;
+        object-fit: cover;
+      }
+      .card-title{
+        font-size: 16px;
+      }
+      .form-group{
+        color: aliceblue;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 50%;
+        margin-left: 314px;
+        
+      }
+
+
+    </style>
+  </head>
+  
+  <body>
+    <h1>Produk Kami</h1>
+
+    <div class="container my-5" id="produk">
+        <a name="produk"></a>
+        <div id="produklist"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $(function(){
+        var URLAPI="https://apimhstiki.ptov.my.id"
+        var NIM="2401010075"
+        let urlProduk = URLAPI+"/"+NIM+"/produk/list"
+        //console.log(urlProduk)
+
+        $.ajax({
+          url:urlProduk,
+          method:"GET",
+          dataType:"json",
+          success:function(dta){
+            if(dta && dta.error==0){
+              let tProduk=""
+              dta.produk.forEach(function(brg,index){
+                tProduk +=`<div class="card" style="width: 15rem; float: left;  margin:19px">
+                  <img src="${brg.IMG}" class="card-img-top produkitem" alt="${brg.ITEM}">
+                  <div class="card-body">
+                    <h5 class="card-title">${brg.ITEM}</h5>
+                    <p class="card-text">Rp. ${brg.HRGJUAL},-</p>
+                    <a href="#" class="btn btn-primary">detail</a>
+                    <a href="#" class="btn btn-primary">Beli</a>
+                  </div>
+                </div>`
+              })
+              $("#produklist").html(tProduk)
+            }else{
+              console.log("tidak ada data produk")
+            }
+          },
+          error:function(xhr, status, error){
+            console.log("Ajax Error:",status,error)
+          }
+        })
+    })
+
+    </script>
+
+        <h2>Berikan Testimoni Anda</h2>
+
+    <div class="alert alert-info" role="alert" id="inf1">
+        A simple info alert—check it out!
+    </div>
+    <div class="alert alert-danger" role="alert" id="inf2">
+        aaaaaaaaa
+    </div>
+
+    <span id="newtesti">
+        <form id="fTesti" method="post">
+            <input type="hidden" name="NIM" value="2401010075">
+            <input type="hidden" name="ACT" value="stored">
+            <div class="form-group">
+                <label>Nama</label>
+                <input type="text" class="form-control" name="NAMA">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="EMAIL">
+            </div>
+            <div class="form-group">
+                <label>Tuliskan testi</label>
+                <textarea class="form-control" name="TESTI"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Tulis Testi</button>
+            </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        var nim="2401010075"
+        var urlAPI="https://apimhstiki.ptov.my.id/"
+        var urlREAD= urlAPI+"testi"
+
+        $("#inf1").hide()
+        $("#inf2").hide()
+
+        $("#fTesti").on("submit", function(ev){
+            ev.preventDefault()
+            let dtTesti = $(this).serialize()
+            $.ajax({
+                url:urlREAD,
+                method: "POST",
+                dataType: "json",
+                data: dtTesti,
+                success: function(dt){
+                    if(dt.error==0){
+                        console.log("data berhasil di simpan")
+                        $("#inf1").show()
+                        $("#inf1").html("data berhasil disimpan")
+                    }else{
+                        console.log("terjadi kegagalan menyimpan data di serer")
+                        $("#inf2").show()
+                        $("#inf2").html("terjadi kegegalan menyimpan data di server")
+                    }
+                },
+                error: function(){
+                console.log("terjadi kegegalan dalam pengiriman data")
+                $("#inf2").show()
+                $("#inf2").html("terjadi kegegalan menyimpan data di server")
+                }
+            })
+        })
+    </script>
+    <a href="testimoni.html" class="btn btn-primary">Lihat Testimoni</a>
+    
+    <div class="mb-3 text-center">
+        <a href="UAS RAMA.html" class="btn btn-warning">Beranda</a>
+    </div>
+
+  </body>
+</html>
